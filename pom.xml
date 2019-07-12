@@ -11,17 +11,21 @@
     <properties>
         <!-- 设置 github 服务器使用的配置，在 ~/.m2/settings.xml 中定义 -->
         <github.global.server>xmb.ben</github.global.server>
+        <maven.deploy.plugin.version>2.8.2</maven.deploy.plugin.version>
+        <github.site.maven.plugin.version>0.11</github.site.maven.plugin.version>
+        <maven.repo.dir>mvn-repo</maven.repo.dir>
+        <github.repo.owner>mbXian</github.repo.owner>
     </properties>
 
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
+                <version>${maven.deploy.plugin.version}</version>
                 <configuration>
                     <!--设置部署目录-->
                     <altDeploymentRepository>
-                        internal.repo::default::file://${project.build.directory}/mvn-repo
+                        internal.repo::default::file://${project.build.directory}/${maven.repo.dir}
                     </altDeploymentRepository>
                 </configuration>
             </plugin>
@@ -29,7 +33,7 @@
             <plugin>
                 <groupId>com.github.github</groupId>
                 <artifactId>site-maven-plugin</artifactId>
-                <version>0.11</version>
+                <version>${github.site.maven.plugin.version}</version>
 
                 <configuration>
                     <!--git 提交的消息-->
@@ -37,17 +41,17 @@
                     <!--禁用网页处理-->
                     <noJekyll>true</noJekyll>
                     <!--部署的目录，这里是和上面的 maven-deploy-plugin 的 configuration.altDeploymentRepository 对应-->
-                    <outputDirectory>${project.build.directory}/mvn-repo
+                    <outputDirectory>${project.build.directory}/${maven.repo.dir}
                     </outputDirectory> <!-- matches distribution management repository url above -->
                     <!--远程分支名-->
-                    <branch>refs/heads/mvn-repo</branch>
+                    <branch>refs/heads/${maven.repo.dir}</branch>
                     <includes>
                         <include>**/*</include>
                     </includes>
                     <!--github 仓库的名字-->
-                    <repositoryName>b-dev-tool-mvn-repo</repositoryName>
+                    <repositoryName>${project.artifactId}</repositoryName>
                     <!--github 用户名-->
-                    <repositoryOwner>mbXian</repositoryOwner>
+                    <repositoryOwner>${github.repo.owner}</repositoryOwner>
                 </configuration>
 
                 <executions>
